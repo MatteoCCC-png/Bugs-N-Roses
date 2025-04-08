@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Onboarding
-//
-//  Created by Giovanni Monaco on 12/05/23.
-//
-
 
 import SwiftUI
 
@@ -16,7 +9,7 @@ struct Onboarding: View {
             Spacer()
             VStack {
                 Text("Welcome to")
-                    .font(.largeTitle) // forse?
+                    .font(.largeTitle) // da discutere
                 Text("Habit Hub!")
                     .foregroundColor(.accentColor)
             }
@@ -25,13 +18,13 @@ struct Onboarding: View {
             Spacer()
             VStack(spacing: 20.0) {
                 HStack(spacing: 16.0) {
-                    Image(systemName: "mail.and.text.magnifyingglass")
+                    Image(systemName: "checklist")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.accentColor)
                     VStack(alignment: .leading) {
-                        Text("Explore")
-                        Text("From navigation to visuals. Dive into the world of Human Interface Guidelines.")
+                        Text("Track")
+                        Text("Start tracking your habits now. Get suggestions and reminders to stay on top of your goals.")
                             .foregroundColor(.secondary)
                     }
                     .font(.subheadline)
@@ -39,14 +32,14 @@ struct Onboarding: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 HStack(spacing: 16.0) {
-                    Image(systemName: "pencil.and.ruler")
+                    Image(systemName: "chart.bar.xaxis")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.accentColor)
                         .padding(.horizontal, 4)
                     VStack(alignment: .leading) {
-                        Text("Design")
-                        Text("Learn to design purposeful apps that follow Apple's Human Interface Guidelines effortlessly.")
+                        Text("Analyze")
+                        Text("Do a deep dive into your statistics and understand your progress for each habit.")
                             .foregroundColor(.secondary)
                     }
                     .font(.subheadline)
@@ -55,14 +48,14 @@ struct Onboarding: View {
                     
                 }
                 HStack(spacing: 16.0) {
-                    Image(systemName: "iphone.gen2")
+                    Image(systemName: "sparkles")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.accentColor)
                         .padding(.horizontal, 6)
                     VStack(alignment: .leading) {
-                        Text("Develop")
-                        Text("Implement with ease and bring your design to life! Follow the code to seamlessly implement.")
+                        Text("Reflect")
+                        Text("Take time to review your journey. Use what you've learned to refine your habits and keep improving.")
                             .foregroundColor(.secondary)
                     }
                     .font(.subheadline)
@@ -76,21 +69,16 @@ struct Onboarding: View {
             Spacer()
             VStack(spacing: 16.0) {
                 VStack(spacing: 6.0) {
-                    Image(systemName: "info.square.fill")
+                    Image(systemName: "heart.fill")
                         .symbolRenderingMode(.hierarchical)
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.accentColor)
-                    Text("The Apple Foundation Program is an immersive educational initiative designed to introduce aspiring developers to the world of app creation and software development. Embark on an captivating journey where code comes to life, and creativity knows no bounds.")
+                    Text("Made with love from the Bugs n' Roses team. A big applause for Giusy, Umberto and all of the mentors!")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
-                    Button {
-                        print("Learn more tapped!")
-                    } label: {
-                        Link("Learn more", destination: URL(string: "https://www.developeracademy.unina.it/en/")!) .font(.caption)
-                        
-                    }
+                        .padding()
                 }
                 Button {
                     print("Continue tapped!")
@@ -111,5 +99,5 @@ struct Onboarding: View {
 }
 
 #Preview {
-     
+    Onboarding()
 }
