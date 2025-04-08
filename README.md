@@ -22,3 +22,8 @@ Al primo avvio, l’applicazione chiede di introdurre almeno una abitudine della
 L’applicazione deve consentire di aggiornare i progressi delle abitudini già inserite, in base alle caratteristiche della singola abitudine. L’applicazione deve anche essere in grado di rappresentare in maniera grafica i progressi delle singole abitudini e in generale di tutte le abitudini tracciate nello stesso modo, e deve essere visualizzato in maniera settimanale, mensile o trimestrale. Per ogni abitudine si ha una sezione testuale “trend” dove viene descritto l’andamento della propria abitudine e una frase di incoraggiamento.
 
 L’applicazione potrebbe anche integrare un sistema di diario personalizzato, dove l’utente può riempire ogni giorno un form dove può indicare l’andamento generale della giornata. Se l’utente non riempie il diario entro la fine del giorno, non è in grado di inserirla nei giorni successivi.
+
+
+
+
+Matteo Caccavale
