@@ -23,7 +23,6 @@ L’applicazione deve consentire di aggiornare i progressi delle abitudini già 
 
 L’applicazione potrebbe anche integrare un sistema di diario personalizzato, dove l’utente può riempire ogni giorno un form dove può indicare l’andamento generale della giornata. Se l’utente non riempie il diario entro la fine del giorno, non è in grado di inserirla nei giorni successivi.
 
-
-
+Andrea Luciano
 
 Matteo Caccavale
