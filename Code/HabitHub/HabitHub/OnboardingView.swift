@@ -16,7 +16,8 @@ struct Onboarding: View {
             Spacer()
             VStack {
                 Text("Welcome to")
-                Text("HIG Mini")
+                    .font(.largeTitle) // forse?
+                Text("Habit Hub!")
                     .foregroundColor(.accentColor)
             }
             .font(.title)
