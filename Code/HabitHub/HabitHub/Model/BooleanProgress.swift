@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
+import SwiftData
 
+@Model
 class BooleanProgress: Progress {
     var day: Date
     var progress: Bool

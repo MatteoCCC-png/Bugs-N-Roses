@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
-class QuantityProgress:Progress {
+@Model
+class QuantityProgress: Progress{
+    
     var day: Date
     var progress: Int
     

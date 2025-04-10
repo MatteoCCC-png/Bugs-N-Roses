@@ -1,18 +1,18 @@
 import SwiftUI
 
-enum Frequency: String {
+enum Frequency: String, Codable {
     case daily
     case weekly
     case monthly
 }
 
-enum TrackingMethod: String {
+enum TrackingMethod: String, Codable {
     case time
     case count
     case bool
 }
 
-struct Category {
+struct Category: Codable{
     let name: String
     let systemImage: String
 
@@ -35,5 +35,8 @@ protocol Habit{
     var trackingMethod: TrackingMethod {get set}
     var frequency: Frequency {get set}
     var isCompleted: Bool {get set}
+    
+    var notifyMe: Bool {get set}
+    var notificationTime: Date {get set}
     
 }
