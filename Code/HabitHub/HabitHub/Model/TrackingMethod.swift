@@ -1,4 +1,4 @@
-import SwiftUI
+/*import SwiftUI
 
 protocol TrackingMethod{
     var name: String { get }
@@ -22,4 +22,4 @@ class progress: Identifiable {
         self.date = Date()
         self.value = 0.0
     }
-}
+}*/
