@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class BooleanProgress {
+class BooleanProgress: Progress {
     var day: Date
     var progress: Bool
     

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class QuantityProgress {
+class QuantityProgress:Progress {
     var day: Date
     var progress: Int
     
