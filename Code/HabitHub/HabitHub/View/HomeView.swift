@@ -12,12 +12,12 @@ import SwiftUI
 struct HomeView: View {
     
     @State private var showAddView = false // Variabile per gestire la modale dell'add button
-
+    
     
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack(alignment: .leading, spacing: 13) {
+                VStack(alignment: .leading) {
                     HStack{ // Header HStack
                         VStack(alignment: .leading) {
                             Text(formattedDate)
@@ -26,6 +26,7 @@ struct HomeView: View {
                             Text("Hello!")
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
+                                .foregroundStyle(Color("HomeTitleColor"))
                         }
                         
                         Spacer()
@@ -36,24 +37,28 @@ struct HomeView: View {
                                 .padding()
                                 .font(.title2)
                                 .offset(x: 5, y: 5)
+                                .foregroundStyle(Color(red: 38/255, green: 185/255, blue: 171/255))
                         }
-                            .sheet(isPresented: $showAddView) {
-                                AddView(onDone: {
-                                    showAddView = false
-                                }) // Apre AddView come modale
-                            }
+                        .sheet(isPresented: $showAddView) {
+                            AddView(onDone: {
+                                showAddView = false
+                            }) // Apre AddView come modale
+                        }
                         
                     }
                     
                     Text("Your progresses for today")
                         .font(.callout)
                         .foregroundColor(.secondary)
-                        
+                }
+                
+                VStack(alignment: .leading, spacing: 20){
+                    
                     
                     ProgressCardView()
                     
                     ScrollView(.horizontal){
-                        HStack{
+                        HStack(spacing:20){
                             MedalCardView(title: "Your first medal!", description: "This is a placeholder for a future gamification \nfeature!", systemImageName: "star.circle", locked: false)
                             MedalCardView(title: "Freezed medal...", description: "Non so cosa scrivere quindi riempio con parole\na caso.", systemImageName: "star.circle", locked: true)
                         }
@@ -68,19 +73,22 @@ struct HomeView: View {
                             print("Explore tapped")
                         }) {
                             Text("See all")
-                                .foregroundColor(.blue)
+                                .foregroundStyle(Color("ButtonColor"))
                             Image(systemName: "chevron.right")
+                                .foregroundStyle(Color("ButtonColor"))
                         }
                     }
-                    
+                }
+                VStack(spacing: 20){
                     SuggestionCardView(title: "Reading a book", category: .learning, goal: "10 pages a day")
                     SuggestionCardView(title: "Meditation", category: .meditation, goal: "5 minutes a day")
                     SuggestionCardView(title: "Cooking a healty meal", category: .nutrition, goal: "10 minutes a day")
                     SuggestionCardView(title: "Have a good sleep", category: .health, goal: "7 hours")
-                        
                 }
-                .padding()
+                
             }
+            .padding()
+            .scrollIndicators(.hidden)
         }
     }
 }
@@ -96,25 +104,27 @@ var formattedDate : String {
 struct ProgressCardView: View {
     let items: [ProgressItem] = [
         .percentage(icon: "theatermask.and.paintbrush.fill", value: 0.1),
-        .percentage(icon: "house.fill", value: 0.5),
-        .timer(icon: "bolt.heart.fill", time: "05:34"),
+        .percentage(icon: "house.circle", value: 0.5),
+        .timer(icon: "bolt.heart", time: "05:34"),
         .boolean(icon: "books.vertical.fill", completed: true),
-        .boolean(icon: "house.fill", completed: false)
+        .boolean(icon: "house.circle", completed: false)
     ]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Text("Add your daily progress")
-                    .font(.title3)
+                    .font(.headline)
                     .bold()
-                Spacer()
-                Image(systemName: "pencil.tip.crop.circle.badge.plus") // TODO oppure plus.app
+                    .foregroundStyle(Color("HomeTitleColor"))
+                
+                Image(systemName: "pencil.tip.crop.circle.badge.plus")
                     .font(.title2)
+                    .foregroundStyle(Color("HomeTitleColor"))
             }
 
             HStack{
-                ScrollView(.horizontal, showsIndicators: false) {
+                ScrollView(.horizontal) {
                     HStack(spacing: 20) {
                         ForEach(items) { item in
                             itemView(for: item)
@@ -131,7 +141,7 @@ struct ProgressCardView: View {
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color("CardsColor"))
         .cornerRadius(20)
     }
 
@@ -141,7 +151,7 @@ struct ProgressCardView: View {
             Image(systemName: item.iconName)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 45, height: 45)
+                .frame(width: 36, height: 36)
                 .foregroundColor(.accentColor)
                 .padding(.top, 4)
 
@@ -161,9 +171,9 @@ struct ProgressCardView: View {
                         .font(.headline)
                 }
             }
-            .frame(height: 20) // altezza fissa per tutti i contenuti sotto
+            .frame(height: 10) // altezza fissa per tutti i contenuti sotto
         }
-        .frame(width: 50, height: 80, alignment: .top)
+        .frame(width: 60, height: 70, alignment: .top)
     }
 }
 
@@ -192,23 +202,27 @@ struct MedalCardView: View {
         HStack(spacing: 15) {
             Image(systemName: systemImageName)
                 .font(.largeTitle)
-                .foregroundColor(locked ? .gray : .teal) // Yellow if unlocked
+                .foregroundColor(locked ? .gray.opacity(0.8) : Color(red: 38/255, green: 185/255, blue: 171/255)) // Yellow if unlocked
                 .padding(10)
                 .background(
-                    Circle().fill(locked ? Color(.systemGray4) : Color.teal.opacity(0.2))
+                    Circle().fill(locked ? Color(.systemGray4) : Color(red: 38/255, green: 185/255, blue: 171/255).opacity(0.5))
+                    
                 )
-
 
             VStack(alignment: .leading) {
                 Text(title)
                     .font(.headline)
+                    .foregroundStyle(Color("HomeTitleColor"))
                 Text(description)
-                    .font(.caption)
+                    .font(.caption2)
                     .foregroundColor(.secondary)
             }
+            Spacer()
+
         }
         .padding()
-        .background(Color(.systemGray6))
+        .frame(width: 370, height: 95)
+        .background(Color("CardsColor"))
         .cornerRadius(15)
     }
 }
@@ -223,23 +237,28 @@ struct SuggestionCardView: View {
             VStack(alignment:.leading){
                 Text(title)
                     .font(.title2)
-                    .bold()
+                    .fontWeight(.semibold)
                     .foregroundColor(.accentColor)
                 Spacer()
                 Text("Category: " + category.name)
+                    .foregroundStyle(Color("HomeTitleColor"))
                 Text("Goal: " + goal)
+                    .foregroundStyle(Color("HomeTitleColor"))
 
             }
             Spacer()
             Image(systemName: category.systemImage)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 70, height: 70)
+                .frame(width: 60, height: 60)
                 .foregroundColor(.accentColor)
-        }
+                .padding(5)
+                }
         .padding()
-        .background(Color(.systemGray6))
+        .frame(width: 370, height: 115)
+        .background(Color("CardsColor"))
         .cornerRadius(15)
+
     }
 }
 
