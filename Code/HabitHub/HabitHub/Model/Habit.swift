@@ -3,7 +3,7 @@ import SwiftUI
 enum Frequency: String, Codable {
     case daily
     case weekly
-    case monthly
+    case monthly3
 }
 
 enum TrackingMethod: String, Codable {
