@@ -12,7 +12,7 @@ import SwiftData
 struct HabitHubApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            ContainerView()
         }.modelContainer(for: [BooleanHabit.self, TimeHabit.self, QuantityHabit.self])
     }
 }
