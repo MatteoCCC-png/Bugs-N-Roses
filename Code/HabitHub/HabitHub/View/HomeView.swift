@@ -10,6 +10,10 @@
 import SwiftUI
 
 struct HomeView: View {
+    
+    @State private var showAddView = false // Variabile per gestire la modale dell'add button
+
+    
     var body: some View {
         NavigationView {
             ScrollView {
@@ -25,14 +29,19 @@ struct HomeView: View {
                         }
                         
                         Spacer()
-                        Button{
-                            print("Buttone premut")
-                        } label: {
+                        Button(action: {
+                            showAddView.toggle()
+                        }) {
                             Image(systemName: "plus.circle")
                                 .padding()
                                 .font(.title2)
                                 .offset(x: 5, y: 5)
                         }
+                            .sheet(isPresented: $showAddView) {
+                                AddView(onDone: {
+                                    showAddView = false
+                                }) // Apre AddView come modale
+                            }
                         
                     }
                     
