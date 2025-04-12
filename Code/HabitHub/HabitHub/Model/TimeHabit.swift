@@ -24,8 +24,10 @@ class TimeHabit: Habit, Identifiable{
     var goal: TimeInterval
     
     @Relationship(deleteRule: .cascade)
-    var totalProgress: [TimeProgress] = []
+    var totalProgress: [TimeProgress]
     
+    var dailyProgressPercent: [Double]
+   
     init(name: String, category: Category, frequency: Frequency, goal: TimeInterval, notifyMe: Bool, notificationTime: Date) {
         self.name = name
         self.category = category
@@ -40,6 +42,36 @@ class TimeHabit: Habit, Identifiable{
         
         self.goal = goal
         
-        self.totalProgress.append(TimeProgress(progress: 0))
+        self.totalProgress = []
+        
+        self.dailyProgressPercent = []
+    }
+    
+    
+    func setTotalProgress(progr: TimeProgress){
+        totalProgress.append(progr)
+        var update: Double = calculateProgressPercent( )
+        
+        dailyProgressPercent.append(update)
+    }
+    
+    func calculateProgressPercent() -> Double {
+        var percent:Double = 0.0
+        var countingReachedGoal: Int = 0
+        
+        self.totalProgress.forEach { (progress) in
+            if progress.progress == self.goal {
+                countingReachedGoal += 1
+            }
+        }
+        
+        
+        percent = Double(countingReachedGoal) / Double(self.totalProgress.count) * 100
+        
+        return percent
+    }
+    
+    func updateProgressPercent() {
+        self.dailyProgressPercent.append(calculateProgressPercent())
     }
 }
