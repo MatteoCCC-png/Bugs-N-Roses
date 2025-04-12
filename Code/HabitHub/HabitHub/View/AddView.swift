@@ -11,18 +11,15 @@ struct AddView: View {
     var onDone: (() -> Void)? = nil // opzionale, utile per chiusura da modale
 
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Forza Napoli")
-                .font(.largeTitle)
-
-            Button("Sempre") {
-                onDone?()
-            }
-            .padding()
-            .background(Color.accentColor)
-            .foregroundColor(.white)
-            .cornerRadius(10)
+        NavigationStack{
+            
         }
-        .padding()
     }
+}
+
+//MARK: - Strutture della Add
+
+
+#Preview{
+    AddView()
 }

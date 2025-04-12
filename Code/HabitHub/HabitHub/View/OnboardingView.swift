@@ -82,24 +82,21 @@ struct OnboardingView: View {
                             .multilineTextAlignment(.center)
                             .padding()
                     }
-                    Button {
-                        continueTapped()
-                    } label: {
+                    NavigationLink(destination: HabitSelectView()) {
                         Text("Continue")
                             .padding(8)
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .cornerRadius(16)
-                    
                 }
-                .padding(.horizontal)
-                Spacer()
+                .buttonStyle(.borderedProminent)
+                .cornerRadius(16)
+                
             }
+            .padding(.horizontal)
+            Spacer()
         }
     }
 }
-
 #Preview {
     OnboardingView(){
         print ("E' tutto OK")
