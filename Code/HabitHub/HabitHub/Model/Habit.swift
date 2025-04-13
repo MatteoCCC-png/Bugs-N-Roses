@@ -1,15 +1,19 @@
 import SwiftUI
 
-enum Frequency: String, Codable {
+enum Frequency: String, Codable, Identifiable, CaseIterable{
     case daily
     case weekly
     case monthly
+    
+    var id: String{self.rawValue}
 }
 
-enum TrackingMethod: String, Codable {
+enum TrackingMethod: String, Codable, Identifiable{
     case time
     case count
     case bool
+    
+    var id: String{self.rawValue}
 }
 
 struct Category: Codable{
@@ -26,6 +30,11 @@ struct Category: Codable{
     static let health = Category(name: "Health", systemImage: "bolt.heart")
     static let fun = Category(name: "Fun", systemImage: "bubbles.and.sparkles.fill")
     static let other = Category(name: "Other", systemImage: "square.and.pencil.circle.fill") //TODO discuss
+    
+    static let all: [Category] = [
+            meditation, sport, nutrition, learning, finance,
+            arts, social, health, fun, other
+        ]
 }
 
 protocol Habit{
@@ -37,6 +46,8 @@ protocol Habit{
     
     var notifyMe: Bool {get set}
     var notificationTime: Date {get set}
+    
+    func calculateProgressPercent() -> Double
     
 }
 
