@@ -26,7 +26,10 @@ struct HabitSelectView: View {
                 VStack(spacing: 20) { // Contenitore per le cards
                     StandardHabit()
                         .padding()
-                    CustomizeHabit()
+                    NavigationLink(destination: AddView()) {
+                        CustomizeHabit()
+                    }
+                    .buttonStyle(PlainButtonStyle()) // Rimuove il feedback visivo predefinito
                 }
                 
                 Spacer() // Aggiungi uno Spacer per bilanciare il layout
