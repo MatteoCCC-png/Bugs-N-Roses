@@ -55,8 +55,7 @@ struct HomeView: View {
                 VStack(alignment: .leading, spacing: 20){
                     
                     
-                    ProgressCardView() // Add the environment here if needed
-                        // .environment(\.modelContext, context) // Or fetch context inside ProgressCardView
+                    ProgressCardView()
                     
                     ScrollView(.horizontal){
                         HStack(spacing:20){
@@ -189,38 +188,40 @@ struct ProgressCardView: View {
                     .foregroundStyle(Color("HomeTitleColor"))
             }
 
-            HStack{
-                ScrollView(.horizontal, showsIndicators: false) { // Hide scroll indicator if desired
-                    // Check if there are no habits at all
-                    if booleanItems.isEmpty && quantityItems.isEmpty && timeItems.isEmpty {
-                         Text("No habits added yet. Tap '+' to create one!")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .padding(.vertical) // Add some padding
-                    } else {
-                        HStack(spacing: 15) { // Adjust spacing as needed
-                            // Iterate through each type of habit
-                            ForEach(quantityItems) { item in
-                                quantityItemView(for: item)
+            NavigationLink(destination: DailyProgressView()) {
+                HStack{
+                    ScrollView(.horizontal, showsIndicators: false) { // Hide scroll indicator if desired
+                        // Check if there are no habits at all
+                        if booleanItems.isEmpty && quantityItems.isEmpty && timeItems.isEmpty {
+                            Text("No habits added yet. Tap '+' to create one!")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.vertical) // Add some padding
+                        } else {
+                            HStack(spacing: 15) { // Adjust spacing as needed
+                                // Iterate through each type of habit
+                                ForEach(quantityItems) { item in
+                                    quantityItemView(for: item)
+                                }
+                                ForEach(timeItems) { item in
+                                    timeItemView(for: item)
+                                }
+                                ForEach(booleanItems) { item in
+                                    booleanItemView(for: item)
+                                }
                             }
-                            ForEach(timeItems) { item in
-                                timeItemView(for: item)
-                            }
-                            ForEach(booleanItems) { item in
-                                booleanItemView(for: item)
-                            }
+                            .padding(.vertical, 5) // Add padding if items feel cramped
                         }
-                        .padding(.vertical, 5) // Add padding if items feel cramped
                     }
-                }
-                
-                // Keep the chevron if you want navigation, otherwise remove
-                Button(action: {
-                     print("Next tapped")
-                }) {
-                     Image(systemName: "chevron.right")
-                         .font(.title2)
-                         .foregroundColor(.gray)
+                    
+                    // Keep the chevron if you want navigation, otherwise remove
+                    Button(action: {
+                        print("Next tapped")
+                    }) {
+                        Image(systemName: "chevron.right")
+                            .font(.title2)
+                            .foregroundColor(.gray)
+                    }
                 }
             }
         }
