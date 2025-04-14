@@ -43,6 +43,8 @@ struct HomeView: View {
                         .sheet(isPresented: $showAddView) {
                             // Pass the context if AddView needs it for saving
                             AddView()
+                                .environment(\.modelContext, MIGRATED_CONTEXT_VARIABLE_REQUIRED) // Pass context if needed by AddView for saving
+                                // .environment(\.modelContext, context) // If you have context available here
                         }
                         
                     }
@@ -91,69 +93,6 @@ struct HomeView: View {
             .padding()
             .scrollIndicators(.hidden)
         }
-    }
-}
-
-extension HomeView {
-    @MainActor // Ensures context access is on the main thread, good practice for previews
-    static func createPreviewContainer() -> ModelContainer {
-        // Define the configuration
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-
-        // Create the container with VARARGS (comma-separated types, NO brackets)
-        let container = try! ModelContainer(for:
-            BooleanHabit.self,
-            QuantityHabit.self,
-            TimeHabit.self,
-            BooleanProgress.self,
-            QuantityProgress.self,
-            TimeProgress.self
-        , configurations: config)
-
-        // Get the context
-        let context = container.mainContext
-
-        // --- Create Habits and Insert ---
-        /*let sampleBool = BooleanHabit(name: "Meditate", category: .meditation, frequency: .daily, notifyMe: false, notificationTime: Date())
-        context.insert(sampleBool)
-
-        let sampleQty = QuantityHabit(name: "Pushups", category: .sport, frequency: .daily, goal: 20, notifyMe: false, notificationTime: Date())
-        context.insert(sampleQty)
-
-        let sampleTime = TimeHabit(name: "Read", category: .learning, frequency: .daily, goal: 1800, notifyMe: false, notificationTime: Date())
-        context.insert(sampleTime)
-
-        // --- Create Progress objects and Insert ---
-        // Make sure progress dates are actually *today* for the helpers to work
-        let today = Calendar.current.startOfDay(for: Date())
-
-        let boolProgress = BooleanProgress(progress: true)
-        boolProgress.day = today // Set day explicitly for preview
-        context.insert(boolProgress)
-
-        let qtyProgress = QuantityProgress(progress: 15)
-        qtyProgress.day = today // Set day explicitly for preview
-        context.insert(qtyProgress)
-
-        let timeProgress = TimeProgress(progress: 900) // 15 min
-        timeProgress.day = today // Set day explicitly for preview
-        context.insert(timeProgress)
-
-        // --- Establish Relationships ---
-        sampleBool.totalProgress.append(boolProgress)
-        sampleQty.totalProgress.append(qtyProgress)
-        sampleTime.totalProgress.append(timeProgress)
-
-        // Add a habit without progress today to test that case
-        let sampleNoProgress = BooleanHabit(name: "Drink Water", category: .health, frequency: .daily, notifyMe: false, notificationTime: Date())
-        context.insert(sampleNoProgress)
-
-
-        // Optional: Explicit save
-        // try? context.save()*/
-
-        try? context.save()
-        return container
     }
 }
 
@@ -447,7 +386,28 @@ extension TimeInterval {
 }
 
 
-#Preview { // Preview block itself remains simple
-    HomeView()
-        .modelContainer(HomeView.createPreviewContainer()) // Call the static function
+#Preview {
+    // Add sample data to the preview container if needed for visualization
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: [BooleanHabit.self, QuantityHabit.self, TimeHabit.self], configurations: config)
+
+    // Example Habits for Preview
+    let sampleBool = BooleanHabit(name: "Meditate", category: .meditation, frequency: .daily, notifyMe: false, notificationTime: Date())
+    container.mainContext.insert(sampleBool)
+    // Optionally add a progress entry for today
+     sampleBool.totalProgress.append(BooleanProgress(progress: true)) // Mark as done for today in preview
+
+    let sampleQty = QuantityHabit(name: "Pushups", category: .sport, frequency: .daily, goal: 20, notifyMe: false, notificationTime: Date())
+     container.mainContext.insert(sampleQty)
+    // Optionally add a progress entry for today
+     sampleQty.totalProgress.append(QuantityProgress(progress: 15)) // 15/20 done in preview
+
+    let sampleTime = TimeHabit(name: "Read", category: .learning, frequency: .daily, goal: 1800, notifyMe: false, notificationTime: Date()) // 30 min goal
+     container.mainContext.insert(sampleTime)
+    // Optionally add a progress entry for today
+     sampleTime.totalProgress.append(TimeProgress(progress: 900)) // 15 min done in preview
+
+
+    return HomeView()
+        .modelContainer(container) // Use the container with sample data for the preview
 }

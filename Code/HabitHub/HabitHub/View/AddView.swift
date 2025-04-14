@@ -380,7 +380,14 @@ struct AddView: View {
             let newHabit = TimeHabit(name: name, category: category, frequency: frequency, goal: timeGoal ?? 0.0, notifyMe: remember, notificationTime: setNotify ?? Date())
             context.insert(newHabit)
         }
+
+        // Salva il contesto
+        try? context.save()
+
+        // Chiama il callback per segnalare il completamento (questo ora chiuderà l'intera modale di onboarding)
         onDone()
+
+        // Dismiss solo AddView (torna a HabitSelectView brevemente prima che onDone chiuda tutto)
         dismiss()
     }
 }

@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct OnboardingView: View {
@@ -82,7 +81,8 @@ struct OnboardingView: View {
                             .multilineTextAlignment(.center)
                             .padding()
                     }
-                    NavigationLink(destination: HabitSelectView()) {
+                    // Modifica il NavigationLink per passare la closure
+                    NavigationLink(destination: HabitSelectView(onSetupComplete: continueTapped)) {
                         Text("Continue")
                             .padding(8)
                             .frame(maxWidth: .infinity)

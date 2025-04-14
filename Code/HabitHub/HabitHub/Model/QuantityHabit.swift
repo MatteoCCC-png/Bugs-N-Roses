@@ -25,6 +25,16 @@ class QuantityHabit: Habit, Identifiable{
     var totalProgress: [QuantityProgress]
     
     var dailyProgressPercent: [Double]
+
+    var todaysProgress: QuantityProgress? {
+        totalProgress.first { progress in
+            Calendar.current.isDateInToday(progress.day)
+        }
+    }
+
+    var currentProgressToday: Int {
+        todaysProgress?.progress ?? 0 // Default to 0 if no entry exists
+    }
    
     init(name: String, category: Category, frequency: Frequency, goal: Int, notifyMe: Bool, notificationTime: Date) {
         self.name = name

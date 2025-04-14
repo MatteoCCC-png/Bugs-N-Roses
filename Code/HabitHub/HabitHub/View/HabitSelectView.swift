@@ -10,6 +10,9 @@ import SwiftUI
 //TODO verifica gli offset, vedi se ci sta una soluzione migliore
 
 struct HabitSelectView: View {
+    // Aggiungi questa proprietà per ricevere il callback
+    var onSetupComplete: () -> Void = {}
+
     var body: some View {
         NavigationStack {
             VStack() {
@@ -26,7 +29,8 @@ struct HabitSelectView: View {
                 VStack(spacing: 20) { // Contenitore per le cards
                     StandardHabit()
                         .padding()
-                    NavigationLink(destination: AddView()) {
+                    // Modifica il NavigationLink per passare la closure onSetupComplete ad AddView
+                    NavigationLink(destination: AddView(onDone: onSetupComplete)) {
                         CustomizeHabit()
                     }
                     .buttonStyle(PlainButtonStyle()) // Rimuove il feedback visivo predefinito
@@ -161,6 +165,7 @@ struct CustomizeHabit : View {
     }
 }
 
+// Modifica l'anteprima se necessario per fornire un valore predefinito
 #Preview {
-    HabitSelectView()
+    HabitSelectView(onSetupComplete: { print("Setup Complete from Preview") })
 }
