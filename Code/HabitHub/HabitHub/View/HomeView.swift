@@ -8,6 +8,7 @@
 // TODO some fonts size to adjust
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     
@@ -102,13 +103,16 @@ var formattedDate : String {
 }
 
 struct ProgressCardView: View {
-    let items: [ProgressItem] = [
+   /* let items: [ProgressItem] = [
         .percentage(icon: "theatermask.and.paintbrush.fill", value: 0.1),
         .percentage(icon: "house.circle", value: 0.5),
         .timer(icon: "bolt.heart", time: "05:34"),
         .boolean(icon: "books.vertical.fill", completed: true),
         .boolean(icon: "house.circle", completed: false)
-    ]
+    ]*/
+    @Query var booleanItems:[BooleanHabit]
+    @Query var quantityItems:[QuantityHabit]
+    @Query var timeItems:[TimeHabit]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -126,7 +130,13 @@ struct ProgressCardView: View {
             HStack{
                 ScrollView(.horizontal) {
                     HStack(spacing: 20) {
-                        ForEach(items) { item in
+                        ForEach(quantityItems) { item in
+                            itemView(for: item)
+                        }
+                        ForEach(timeItems) { item in
+                            itemView(for: item)
+                        }
+                        ForEach(booleanItems) { item in
                             itemView(for: item)
                         }
                     }
