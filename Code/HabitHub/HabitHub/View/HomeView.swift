@@ -109,12 +109,15 @@ struct ProgressCardView: View {
         .timer(icon: "bolt.heart", time: "05:34"),
         .boolean(icon: "books.vertical.fill", completed: true),
         .boolean(icon: "house.circle", completed: false)
-    ]*/
-    @Query var booleanItems:[BooleanHabit]
-    @Query var quantityItems:[QuantityHabit]
-    @Query var timeItems:[TimeHabit]
+    ]
+    */
+    @Query var booleanItems: [BooleanHabit]
+    @Query var quantityItems: [QuantityHabit]
+    @Query var timeItems: [TimeHabit]
+
 
     var body: some View {
+            
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Text("Add your daily progress")
@@ -155,10 +158,11 @@ struct ProgressCardView: View {
         .cornerRadius(20)
     }
 
-    @ViewBuilder
-    func itemView(for item: ProgressItem) -> some View {
+    
+    //MARK: VISTA PER ITEM DI QUANTITÀ
+    func quantityItemView(item: QuantityHabit) -> some View {
         VStack(spacing: 8) {
-            Image(systemName: item.iconName)
+            Image(systemName: item.category.systemImage)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 36, height: 36)
@@ -166,21 +170,86 @@ struct ProgressCardView: View {
                 .padding(.top, 4)
 
             Group {
-                switch item {
-                case .percentage(_, let value):
-                    ProgressView(value: value)
-                        .progressViewStyle(LinearProgressViewStyle(tint: .accentColor))
-                        .frame(width: 50, height: 4)
-                case .timer(_, let time):
-                    Text(time)
-                        .font(.headline)
-                        .foregroundColor(.accentColor)
-                case .boolean(_, let completed):
-                    Image(systemName: completed ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundColor(completed ? .green : .red)
-                        .font(.headline)
-                }
+                if let last = item.totalProgress.last { //Se c'è l'ultimo elemento
+                        let progress = last.progress  // preleva il valore del progresso dall'ultimo elemento
+                
+                    ProgressView(value: Double(progress) / Double(item.goal))
+                            .progressViewStyle(LinearProgressViewStyle(tint: .accentColor))
+                            .frame(width: 50, height: 4)
+                    } else {
+                        Text("No data")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
             }
+           .progressViewStyle(LinearProgressViewStyle(tint: .accentColor))
+                        .frame(width: 50, height: 4)
+            
+            .frame(height: 10) // altezza fissa per tutti i contenuti sotto
+        }
+        .frame(width: 60, height: 70, alignment: .top)
+    }
+    
+    //MARK: VISTA PER ITEM BOOLEANO
+    func booleanItemView(item: BooleanHabit) -> some View {
+        VStack(spacing: 8) {
+            Image(systemName: item.category.systemImage)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 36, height: 36)
+                .foregroundColor(.accentColor)
+                .padding(.top, 4)
+
+            Group {
+                if let last = item.totalProgress.last {
+                    if last.progress == true{
+                        Image(systemName: "checkmark.circle.fill")
+                    }else {
+                        Image(systemName: "xmark.circle.fill")
+                    }
+                        
+                    } else {
+                        Text("No data")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+            }
+           .progressViewStyle(LinearProgressViewStyle(tint: .accentColor))
+                        .frame(width: 50, height: 4)
+                
+            
+            .frame(height: 10) // altezza fissa per tutti i contenuti sotto
+        }
+        .frame(width: 60, height: 70, alignment: .top)
+    }
+    
+    
+    //MARK: VISTA PER ITEM DI TEMPO
+    func timeItemView(item: TimeHabit) -> some View {
+        VStack(spacing: 8) {
+            Image(systemName: item.category.systemImage)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 36, height: 36)
+                .foregroundColor(.accentColor)
+                .padding(.top, 4)
+
+            Group {
+                if let last = item.totalProgress.last {
+                        let progress = last.progress
+                
+                    ProgressView(value: Double(progress) / Double(item.goal))
+                            .progressViewStyle(LinearProgressViewStyle(tint: .accentColor))
+                            .frame(width: 50, height: 4)
+                    } else {
+                        Text("No data")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+            }
+           .progressViewStyle(LinearProgressViewStyle(tint: .accentColor))
+                        .frame(width: 50, height: 4)
+            
             .frame(height: 10) // altezza fissa per tutti i contenuti sotto
         }
         .frame(width: 60, height: 70, alignment: .top)

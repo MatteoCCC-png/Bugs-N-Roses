@@ -304,10 +304,10 @@ struct AddView: View {
                     }
                     if let trackingMethod = trackingMethod {
                         Text("Selected: \(trackingMethod.rawValue)," +
-                              (trackingMethod == .count ? " \(quantityGoal ?? 0)" :
-                              trackingMethod == .bool ? " \(booleanGoal ? "Yes" : "No")" :
-                              " \(Int(timeGoal ?? 0) / 3600 > 0 ? "\(Int(timeGoal ?? 0) / 3600)h " : "")\(Int(timeGoal ?? 0) % 3600 / 60)m"))
-                            .foregroundColor(.gray)
+                             (trackingMethod == .count ? " \(quantityGoal ?? 0)" :
+                                trackingMethod == .bool ? " \(booleanGoal ? "Yes" : "No")" :
+                                " \(Int(timeGoal ?? 0) / 3600 > 0 ? "\(Int(timeGoal ?? 0) / 3600)h " : "")\(Int(timeGoal ?? 0) % 3600 / 60)m"))
+                        .foregroundColor(.gray)
                     }
                 }
                 .sheet(isPresented: $showTrackingModal) {
@@ -324,7 +324,7 @@ struct AddView: View {
                     })
                     .presentationDetents([.height(400)])
                 }
-
+                
                 
                 Picker("Select a frequency", selection: Binding(
                     get: { frequency},
@@ -365,14 +365,17 @@ struct AddView: View {
                     .disabled(!isFormValid)
                 }
             }
+            
         }
-    }
+        
+}
     
     // Function to add a habit
     func addHabit(name: String, category: Category, trackingMethod: TrackingMethod, frequency: Frequency) {
         if trackingMethod == .count {
             let newHabit = QuantityHabit(name: name, category: category, frequency: frequency, goal: quantityGoal ?? 0, notifyMe: remember, notificationTime: setNotify ?? Date())
             context.insert(newHabit)
+            print("Salvataggio in memoria...")
         } else if trackingMethod == .bool {
             let newHabit = BooleanHabit(name: name, category: category, frequency: frequency, notifyMe: remember, notificationTime: setNotify ?? Date())
             context.insert(newHabit)

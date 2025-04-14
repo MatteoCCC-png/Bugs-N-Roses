@@ -17,7 +17,8 @@ class BooleanHabit: Habit, Identifiable{
     
     @Relationship(deleteRule: .cascade)
     var totalProgress: [BooleanProgress]
-        
+    
+    @Relationship(deleteRule: .cascade)
     var dailyProgressPercent: [Double]
     
     init(name: String , category: Category, frequency: Frequency, notifyMe: Bool, notificationTime: Date) {
