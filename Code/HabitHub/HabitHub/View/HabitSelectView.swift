@@ -27,7 +27,9 @@ struct HabitSelectView: View {
                 Spacer() // Aggiungi uno Spacer per separare il testo dalle cards
                 
                 VStack(spacing: 20) { // Contenitore per le cards
-                    StandardHabit()
+                    NavigationLink(destination: standardHabitView(onPageOpened: onSetupComplete)) {
+                        StandardHabit()
+                    }
                         .padding()
                     // Modifica il NavigationLink per passare la closure onSetupComplete ad AddView
                     NavigationLink(destination: AddView(onDone: onSetupComplete)) {
