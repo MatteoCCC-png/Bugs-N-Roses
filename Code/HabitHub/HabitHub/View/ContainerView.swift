@@ -9,8 +9,9 @@ import SwiftUI
 
 struct ContainerView: View {
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
+    // Use @State for sheet presentation control based on @AppStorage initial value
     @State private var showOnboarding: Bool = false
-    
+
     @State private var selectedTab: Tab = .home
 
     enum Tab {
@@ -25,7 +26,7 @@ struct ContainerView: View {
                     Label("Home", systemImage: "house")
                 }
                 .tag(Tab.home)
-
+                
             ProgressiView()
                 .tabItem {
                     Label("Progress", systemImage: "chart.line.uptrend.xyaxis")
@@ -33,16 +34,24 @@ struct ContainerView: View {
                 .tag(Tab.progress)
         }
         .onAppear {
+            // Trigger sheet presentation based on AppStorage state
             if !hasSeenOnboarding {
                 showOnboarding = true
             }
         }
         .sheet(isPresented: $showOnboarding) {
-            OnboardingView {
-                hasSeenOnboarding = true
-                showOnboarding = false
+            // Wrap sheet content in a NavigationStack
+            NavigationStack {
+                OnboardingView(
+                    // Pass the action to take when onboarding is truly finished
+                    continueTapped: {
+                        hasSeenOnboarding = true // Mark as complete
+                        showOnboarding = false // Dismiss the sheet
+                    }
+                )
             }
-            .interactiveDismissDisabled(true)
+            // Prevent swiping down until onboarding is marked complete
+            .interactiveDismissDisabled(!hasSeenOnboarding)
         }
     }
 }

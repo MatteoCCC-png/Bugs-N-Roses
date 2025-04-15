@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct OnboardingView: View {
@@ -11,7 +10,7 @@ struct OnboardingView: View {
                 VStack {
                     Text("Welcome to")
                         .font(.largeTitle) // da discutere
-                    Text("Habit Hub!")
+                    Text("Habitualize!")
                         .foregroundColor(.accentColor)
                 }
                 .font(.title)
@@ -54,7 +53,7 @@ struct OnboardingView: View {
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(.accentColor)
-                            .padding(.horizontal, 4) //TODO rivedi
+                            .padding(.horizontal, 4)
                         VStack(alignment: .leading) {
                             Text("Reflect")
                             Text("Take time to review your journey. Use what you've learned to refine your habits and keep improving.")
@@ -82,13 +81,21 @@ struct OnboardingView: View {
                             .multilineTextAlignment(.center)
                             .padding()
                     }
-                    NavigationLink(destination: HabitSelectView()) {
-                        Text("Continue")
+                    // Modifica il NavigationLink per passare la closure
+                    NavigationLink(destination: HabitSelectView(onSetupComplete: continueTapped)) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 16)
+                                .foregroundColor(.accentColor)
+                                .frame(height: 50)
+                             Text("Continue")
+                             .foregroundStyle(.white)
                             .padding(8)
                             .frame(maxWidth: .infinity)
+                        }
                     }
+                    
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(PlainButtonStyle())
                 .cornerRadius(16)
                 
             }
@@ -97,6 +104,7 @@ struct OnboardingView: View {
         }
     }
 }
+
 #Preview {
     OnboardingView(){
         print ("E' tutto OK")

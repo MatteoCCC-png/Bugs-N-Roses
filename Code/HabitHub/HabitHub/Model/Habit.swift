@@ -51,3 +51,37 @@ protocol Habit{
     
 }
 
+
+struct SuggestedHabit: Identifiable {
+    let id = UUID() // Make it identifiable for .sheet(item:...)
+    let name: String
+    let category: Category
+    let suggestedMethod: TrackingMethod
+    // Use optional specific goals for clarity
+    let suggestedQuantityGoal: Int?
+    let suggestedTimeGoal: TimeInterval?
+    // Boolean goal is implied by suggestedMethod == .bool
+
+    // Helper to create a display string for the goal
+    var goalString: String {
+        switch suggestedMethod {
+        case .time:
+            return (suggestedTimeGoal ?? 0).formattedShort() + " / day"
+        case .count:
+            return "\(suggestedQuantityGoal ?? 0) times / day" // Or use unit like pages/steps etc.
+        case .bool:
+            return "Complete daily"
+        }
+    }
+
+    // Convenience initializers (optional but helpful)
+    static func time(_ name: String, category: Category, goal: TimeInterval) -> SuggestedHabit {
+        SuggestedHabit(name: name, category: category, suggestedMethod: .time, suggestedQuantityGoal: nil, suggestedTimeGoal: goal)
+    }
+    static func quantity(_ name: String, category: Category, goal: Int) -> SuggestedHabit {
+        SuggestedHabit(name: name, category: category, suggestedMethod: .count, suggestedQuantityGoal: goal, suggestedTimeGoal: nil)
+    }
+    static func boolean(_ name: String, category: Category) -> SuggestedHabit {
+        SuggestedHabit(name: name, category: category, suggestedMethod: .bool, suggestedQuantityGoal: nil, suggestedTimeGoal: nil)
+    }
+}

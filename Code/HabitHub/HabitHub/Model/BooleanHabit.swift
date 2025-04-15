@@ -20,6 +20,16 @@ class BooleanHabit: Habit, Identifiable{
         
     var dailyProgressPercent: [Double]
     
+    var todaysProgress: BooleanProgress? {
+        totalProgress.first { progress in
+            Calendar.current.isDateInToday(progress.day)
+        }
+    }
+
+    var isCompletedToday: Bool {
+        todaysProgress?.progress ?? false // Default to false if no entry exists for today
+    }
+    
     init(name: String , category: Category, frequency: Frequency, notifyMe: Bool, notificationTime: Date) {
         self.name = name
         self.category = category
@@ -37,7 +47,7 @@ class BooleanHabit: Habit, Identifiable{
     
     func setTotalProgress(progr: BooleanProgress){
         totalProgress.append(progr)
-        var update: Double = calculateProgressPercent( )
+        let update: Double = calculateProgressPercent( )
         
         dailyProgressPercent.append(update)
     }

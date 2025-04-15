@@ -27,6 +27,16 @@ class TimeHabit: Habit, Identifiable{
     var totalProgress: [TimeProgress]
     
     var dailyProgressPercent: [Double]
+
+    var todaysProgress: TimeProgress? {
+        totalProgress.first { progress in
+            Calendar.current.isDateInToday(progress.day)
+        }
+    }
+
+    var currentProgressToday: TimeInterval {
+        todaysProgress?.progress ?? 0.0 // Default to 0.0 if no entry exists
+    }
    
     init(name: String, category: Category, frequency: Frequency, goal: TimeInterval, notifyMe: Bool, notificationTime: Date) {
         self.name = name
@@ -50,7 +60,7 @@ class TimeHabit: Habit, Identifiable{
     
     func setTotalProgress(progr: TimeProgress){
         totalProgress.append(progr)
-        var update: Double = calculateProgressPercent( )
+        let update: Double = calculateProgressPercent( )
         
         dailyProgressPercent.append(update)
     }
