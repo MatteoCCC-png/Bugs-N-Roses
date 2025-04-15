@@ -47,7 +47,7 @@ class BooleanHabit: Habit, Identifiable{
     
     func setTotalProgress(progr: BooleanProgress){
         totalProgress.append(progr)
-        var update: Double = calculateProgressPercent( )
+        let update: Double = calculateProgressPercent( )
         
         dailyProgressPercent.append(update)
     }

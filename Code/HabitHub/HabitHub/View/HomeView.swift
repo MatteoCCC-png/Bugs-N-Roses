@@ -12,6 +12,8 @@ import SwiftData
 
 struct HomeView: View {
     
+    @Environment(\.modelContext) private var context
+
     @State private var showAddView = false // Variabile per gestire la modale dell'add button
 
     let sampleSuggestions: [SuggestedHabit] = [
@@ -38,6 +40,9 @@ struct HomeView: View {
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                                 .foregroundStyle(Color("HomeTitleColor"))
+                                .onTapGesture(count: 3) {
+                                    addPlaceholderData()
+                                }
                         }
                         
                         Spacer()
@@ -109,6 +114,49 @@ struct HomeView: View {
             }
             .padding()
             .scrollIndicators(.hidden)
+        }
+    }
+
+    @MainActor // Usa MainActor per modifiche SwiftData che aggiornano la UI
+    private func addPlaceholderData() {
+        print("DEBUG: Adding placeholder data...")
+
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+
+        // Helper per creare date passate
+        func date(daysAgo: Int) -> Date {
+            calendar.date(byAdding: .day, value: -daysAgo, to: today)!
+        }
+
+        // --- Sample Habit 2: Quantity (Read Book) ---
+        let habit2 = QuantityHabit(name: "Read Book", category: .learning, frequency: .daily, goal: 10, notifyMe: false, notificationTime: Date()) // Goal: 10 pagine
+        context.insert(habit2)
+        for i in 0..<15 {
+            let pagesRead = Int.random(in: 0...15) // Progresso casuale (0-15 pagine)
+            let progress = QuantityProgress(progress: pagesRead)
+            progress.day = date(daysAgo: 14 - i)
+            context.insert(progress)
+            habit2.totalProgress.append(progress)
+        }
+
+        // --- Sample Habit 3: Time (Workout) ---
+        let habit3 = TimeHabit(name: "Workout", category: .sport, frequency: .daily, goal: 1800, notifyMe: false, notificationTime: Date()) // Goal: 30 min (1800 sec)
+        context.insert(habit3)
+        for i in 0..<15 {
+            let secondsWorkedOut = TimeInterval(Int.random(in: 0...2400)) // Progresso casuale (0-40 min)
+            let progress = TimeProgress(progress: secondsWorkedOut)
+            progress.day = date(daysAgo: 14 - i)
+            context.insert(progress)
+            habit3.totalProgress.append(progress)
+        }
+
+        // Salva tutte le modifiche
+        do {
+            try context.save()
+            print("DEBUG: Placeholder data added and saved successfully.")
+        } catch {
+            print("DEBUG: Failed to save placeholder data: \(error)")
         }
     }
 }

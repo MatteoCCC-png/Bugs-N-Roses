@@ -24,14 +24,17 @@ struct ContainerView: View {
             HomeView()
                 .tabItem {
                     Label("Home", systemImage: "house")
+                        
                 }
                 .tag(Tab.home)
-
+                
             ProgressiView()
                 .tabItem {
                     Label("Progress", systemImage: "chart.line.uptrend.xyaxis")
+                        .foregroundStyle(Color(red: 10, green: 115, blue: 115))
                 }
                 .tag(Tab.progress)
+                .foregroundStyle(Color(red: 10, green: 115, blue: 115))
         }
         .onAppear {
             // Trigger sheet presentation based on AppStorage state
