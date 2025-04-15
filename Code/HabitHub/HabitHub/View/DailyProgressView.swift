@@ -34,19 +34,27 @@ struct DailyProgressView: View {
                         ForEach(timeHabits) { habit in
                             // Pass the habit and the save trigger UUID to the card
                             TimeProgressCard(habit: habit, saveTrigger: triggerSave)
+                                .contextMenu { // <-- ADD Swipe Action
+                                    contextMenuItems (for: habit)
+                                }
                         }
 
                         // --- Quantity Habits Section ---
                         ForEach(quantityHabits) { habit in
                             QuantityProgressCard(habit: habit, saveTrigger: triggerSave)
+                                .contextMenu { // <-- ADD Swipe Action
+                                    contextMenuItems (for: habit)
+                                }
                         }
+                        
 
                         // --- Boolean Habits Section ---
                         ForEach(booleanHabits) { habit in
                             BooleanProgressCard(habit: habit, saveTrigger: triggerSave)
-                        }
-
-                        // Add a spacer at the end of the scroll content if needed
+                                .contextMenu { // <-- ADD Swipe Action
+                                    contextMenuItems (for: habit)
+                                }
+                        }                        
                         Spacer()
                     }
                     .padding() // Padding around the stack of cards
@@ -70,18 +78,39 @@ struct DailyProgressView: View {
                     Text("Add Your Progress")
                         .font(.headline)
                         .foregroundColor(.white)
-                        .frame(height: 50) // Button height
-                        .frame(maxWidth: .infinity) // Full width
-                        .background(Color("ButtonColor")) // Button background color (adjust as needed)
-                        .cornerRadius(10) // Button corner radius
+                        .frame(height: 50) 
+                        .frame(maxWidth: .infinity) 
+                        .background(Color("ButtonColor")) 
+                        .cornerRadius(10) 
                 }
-                .padding() // Padding around the button
-                .background(Color(.systemGroupedBackground)) // Ensure button background matches view background
+                .padding() 
+                .background(Color(.systemGroupedBackground)) 
             }
 
         } // End Outer VStack
         .navigationTitle("Daily Progress")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+        // MARK: - Context Menu Builder
+    // Helper function to build the menu items for any habit
+    @ViewBuilder
+    private func contextMenuItems(for habit: any PersistentModel & Habit) -> some View {
+        // --- Delete Action ---
+        Button(role: .destructive) {
+            deleteHabit(habit)
+        } label: {
+            Label("Delete Habit", systemImage: "trash")
+        }
+    }
+
+    // MARK: - Delete Function
+    // Generic function to delete any type conforming to PersistentModel (like our Habits)
+    private func deleteHabit(_ habit: any PersistentModel) {
+        modelContext.delete(habit)
+        // Optional: Explicit save if needed, though autosave often handles it.
+        // try? modelContext.save()
+        print("Deleted habit.") // For debugging
     }
 
     // MARK: - Helper Functions to Find or Create Progress Entries

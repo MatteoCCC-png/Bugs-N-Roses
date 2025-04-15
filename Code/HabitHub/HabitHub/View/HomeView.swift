@@ -13,6 +13,16 @@ import SwiftData
 struct HomeView: View {
     
     @State private var showAddView = false // Variabile per gestire la modale dell'add button
+
+    let sampleSuggestions: [SuggestedHabit] = [
+        .quantity("Reading", category: .learning, goal: 10), // e.g., 10 pages
+        .time("Meditation", category: .meditation, goal: 300), // 5 minutes (300 seconds)
+        .boolean("Healthy Meal", category: .nutrition),
+        .time("Sleep", category: .health, goal: 25200) // 7 hours (25200 seconds)
+    ]
+
+    @State private var showAddViewSheetFromSuggestion = false // Flag (alternative to item)
+    @State private var selectedSuggestion: SuggestedHabit? = nil // Holds the selected suggestion
     
     
     var body: some View {
@@ -31,7 +41,9 @@ struct HomeView: View {
                         }
                         
                         Spacer()
+                        
                         Button(action: {
+                            selectedSuggestion = nil
                             showAddView.toggle()
                         }) {
                             Image(systemName: "plus.circle")
@@ -44,7 +56,6 @@ struct HomeView: View {
                             // Pass the context if AddView needs it for saving
                             AddView()
                         }
-                        
                     }
                     
                     Text("Your progresses for today")
@@ -80,10 +91,19 @@ struct HomeView: View {
                     }
                 }
                 VStack(spacing: 20){
-                    SuggestionCardView(title: "Reading a book", category: .learning, goal: "10 pages a day")
-                    SuggestionCardView(title: "Meditation", category: .meditation, goal: "5 minutes a day")
-                    SuggestionCardView(title: "Cooking a healty meal", category: .nutrition, goal: "10 minutes a day")
-                    SuggestionCardView(title: "Have a good sleep", category: .health, goal: "7 hours")
+                    ForEach(sampleSuggestions) { suggestion in
+                        SuggestionCardView(suggestion: suggestion) { selected in
+                            // This closure is called when a card is tapped
+                            print("Suggestion selected: \(selected.name)")
+                            selectedSuggestion = selected // Store the selected suggestion
+                            showAddViewSheetFromSuggestion = true // Trigger sheet using the item state below
+                        }
+                        .sheet(item: $selectedSuggestion) { suggestion in
+                            // This closure is called when selectedSuggestion is NOT nil
+                            // It receives the non-optional suggestion
+                            AddView(suggestion: suggestion)
+                        }
+                    }
                 }
                 
             }
@@ -352,10 +372,6 @@ struct ProgressCardView: View {
     }
 }
 
-// Remove the old ProgressItem enum
-// enum ProgressItem: Identifiable { ... }
-
-
 struct MedalCardView: View {
     let title: String
     let description: String
@@ -392,37 +408,42 @@ struct MedalCardView: View {
 }
 
 struct SuggestionCardView: View {
-    let title : String
-    let category : Category
-    let goal : String
-    
+    let suggestion: SuggestedHabit // Accept the structured data
+    var onSelect: (SuggestedHabit) -> Void // Callback when tapped
+
     var body: some View {
-        HStack{
-            VStack(alignment:.leading){
-                Text(title)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.accentColor)
-                Spacer()
-                Text("Category: " + category.name)
-                    .foregroundStyle(Color("HomeTitleColor"))
-                Text("Goal: " + goal)
-                    .foregroundStyle(Color("HomeTitleColor"))
+        Button {
+            onSelect(suggestion) // Trigger the callback with this suggestion
+        } label: {
+            HStack{
+                VStack(alignment:.leading){
+                    Text(suggestion.name) // Use data from suggestion
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.accentColor) // Or your custom title color
+                    Spacer()
+                    Text("Category: " + suggestion.category.name)
+                        .font(.callout) // Slightly smaller font
+                        .foregroundStyle(Color("HomeTitleColor"))
+                    Text("Goal: " + suggestion.goalString) // Use the formatted goal string
+                         .font(.callout)
+                        .foregroundStyle(Color("HomeTitleColor"))
 
-            }
-            Spacer()
-            Image(systemName: category.systemImage)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 60, height: 60)
-                .foregroundColor(.accentColor)
-                .padding(5)
                 }
-        .padding()
-        .frame(width: 370, height: 115)
-        .background(Color("CardsColor"))
-        .cornerRadius(15)
-
+                Spacer()
+                Image(systemName: suggestion.category.systemImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 60, height: 60)
+                    .foregroundColor(.accentColor) // Or your custom icon color
+                    .padding(5)
+            }
+            .padding()
+            .frame(width: 370, height: 115)
+            .background(Color("CardsColor")) // Your card background
+            .cornerRadius(15)
+        }
+        .buttonStyle(.plain) // Use plain style to allow custom background/appearance
     }
 }
 

@@ -97,6 +97,7 @@ struct OnboardingView: View {
         }
     }
 }
+
 #Preview {
     OnboardingView(){
         print ("E' tutto OK")

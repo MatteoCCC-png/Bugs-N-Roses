@@ -12,7 +12,6 @@ import SwiftData
 struct TrackingMethodView: View {
 
     @Environment(\.dismiss) var dismiss
-
     
     @State private var selectedHour: Int = 1
     @State private var selectedMinute: Int = 15
@@ -182,16 +181,6 @@ struct TrackingMethodView: View {
     }
 }
 
-/*struct TrackingMethodModalViewFinal_Preview: PreviewProvider {
-    static var previews: some View {
-        Text("Parent View").sheet(isPresented: .constant(true)) {
-            TrackingMethodView(onTrackingMethodSelected: { _, _ in })
-                .presentationDetents([.height(400)]) // Fixed height for preview consistency
-        }
-    }
-}
-Se vuoi la anteprima solo della tracking mode, altrimenti cancella */
-
 
 struct CategoryModalView: View {
     @Binding var selectedCategory: Category?
@@ -266,6 +255,26 @@ struct AddView: View {
 
     var onDone: () -> Void = {}
 
+    // --- Initializer for pre-filling from Suggestion ---
+    init(suggestion: SuggestedHabit? = nil, onDone: @escaping () -> Void = {}) {
+        self.onDone = onDone // Store the completion handler
+
+        // Pre-fill state based on suggestion, if provided
+        if let suggestion = suggestion {
+            // Use _variable = State(initialValue: ...) to set initial @State value
+            _name = State(initialValue: suggestion.name)
+            _category = State(initialValue: suggestion.category)
+            _trackingMethod = State(initialValue: suggestion.suggestedMethod)
+            _quantityGoal = State(initialValue: suggestion.suggestedQuantityGoal ?? 1) // Use suggested or default
+            _timeGoal = State(initialValue: suggestion.suggestedTimeGoal ?? 300) // Use suggested or default
+            // Boolean goal is handled by trackingMethod being .bool
+        } else {
+            // If no suggestion, the default @State initializers are used
+            // (name="", category=nil, etc.)
+        }
+    }
+
+
     private var isFormValid: Bool {
         guard let name = name, !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return false
@@ -336,6 +345,7 @@ struct AddView: View {
                     }
                 }
                 
+
                 Section {
                     Toggle("Remember me to do it", isOn: $remember)
                 }
@@ -352,15 +362,10 @@ struct AddView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        if let name = name,
-                           let category = category,
-                           let trackingMethod = trackingMethod,
-                           let frequency = frequency {
-                            addHabit(name: name, category: category, trackingMethod: trackingMethod, frequency: frequency)
+                    Button("Add") {
+                        if isFormValid {
+                            addHabit(name: name!, category: category ?? Category.other, trackingMethod: trackingMethod!, frequency: Frequency.weekly )
                         }
-                    }) {
-                        Text("Add")
                     }
                     .disabled(!isFormValid)
                 }
@@ -394,6 +399,15 @@ struct AddView: View {
 
 
 
-#Preview {
-    AddView()
+#Preview("Add View - Empty") {
+    AddView() // Default init creates empty view
+        .modelContainer(for: [BooleanHabit.self, QuantityHabit.self, TimeHabit.self], inMemory: true)
+}
+
+#Preview("Add View - Suggested") {
+    // Create a sample suggestion
+    let suggestion = SuggestedHabit.time("Evening Walk", category: .sport, goal: 1800) // 30 min
+
+    AddView(suggestion: suggestion) // Use the suggestion initializer
+        .modelContainer(for: [BooleanHabit.self, QuantityHabit.self, TimeHabit.self], inMemory: true)
 }
